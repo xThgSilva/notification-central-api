@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.notification.central.dto.UserDTO;
+import com.notification.central.entities.PermissionType;
 import com.notification.central.entities.User;
 import com.notification.central.repositories.UserRepository;
 
@@ -20,6 +21,7 @@ public class UserService {
 		
 		user.setName(dto.getName());
 		user.setEmail(dto.getEmail());
+		user.setPermission(dto.getPermission());
 		user.setPassword(dto.getPassword());
 		
 		user = userRepository.save(user);
