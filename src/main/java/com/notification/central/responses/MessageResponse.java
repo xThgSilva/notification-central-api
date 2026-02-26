@@ -1,11 +1,10 @@
-package com.notification.central.dto;
+package com.notification.central.responses;
 
 import java.time.LocalDateTime;
 
 import com.notification.central.entities.Message;
 
-public class MessageDTO {
-	
+public class MessageResponse {
 	private Long id;
 	private Long senderUserId;
 	private Long recipientUserId;
@@ -13,10 +12,10 @@ public class MessageDTO {
 	private LocalDateTime sendAt;
 	private boolean isRead;
 	
-	public MessageDTO() {
+	public MessageResponse() {
 	}
 
-	public MessageDTO(Long id, Long senderUserId, Long recipientUserId, String content, LocalDateTime sendAt,
+	public MessageResponse(Long id, Long senderUserId, Long recipientUserId, String content, LocalDateTime sendAt,
 			boolean isRead) {
 		this.id = id;
 		this.senderUserId = senderUserId;
@@ -25,14 +24,14 @@ public class MessageDTO {
 		this.sendAt = sendAt;
 		this.isRead = isRead;
 	}
-
-	public MessageDTO(Message entity) {
-		this.id = entity.getId();
-		this.senderUserId = entity.getSenderUser().getId();
-		this.recipientUserId = entity.getRecipientUser().getId();
-		this.content = entity.getContent();
-		this.sendAt = entity.getSendAt();
-		this.isRead = entity.isRead();
+	
+	public MessageResponse(Message entity) {
+	    this.id = entity.getId();
+	    this.senderUserId = entity.getSenderUser().getId();
+	    this.recipientUserId = entity.getRecipientUser().getId();
+	    this.content = entity.getContent();
+	    this.sendAt = entity.getSendAt();
+	    this.isRead = entity.isRead();
 	}
 
 	public Long getId() {

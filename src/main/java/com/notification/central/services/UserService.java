@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.notification.central.dto.UserDTO;
-import com.notification.central.entities.PermissionType;
 import com.notification.central.entities.User;
 import com.notification.central.repositories.UserRepository;
+import com.notification.central.requests.UserRequest;
+import com.notification.central.responses.UserResponse;
 
 @Service
 public class UserService {
@@ -16,41 +16,42 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public User createAccount(UserDTO dto) {
+	public UserResponse createAccount(UserRequest request) {
 		User user = new User();
 		
-		user.setName(dto.getName());
-		user.setEmail(dto.getEmail());
-		user.setPermission(dto.getPermission());
-		user.setPassword(dto.getPassword());
+		user.setName(request.getName());
+		user.setEmail(request.getEmail());
+		user.setPermission(request.getPermission());
+		user.setPassword(request.getPassword());
 		
 		user = userRepository.save(user);
 		
-		return user;
+		return new UserResponse(user);
 	}
 	
-	public List<User> listAllUsers(){
-		return userRepository.findAll();
+	public List<UserResponse> listAllUsers(){
+		return userRepository.findAll() .stream()
+	            .map(UserResponse::new)
+	            .toList();
 	}
 	
-	public User findUserById(Long id) {
+	public UserResponse findUserById(Long id) {
 		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with Id " + id + " not found."));
 		
-		return user;
+		return new UserResponse(user);
 	}
 	
 	public String deleteUserById(Long id) {
-		userRepository.deleteById(id);
-		
-		if (!userRepository.existsById(id)) {
-			return "User successfully deleted";
+		if (userRepository.existsById(id)) {
+			userRepository.deleteById(id);
+			return "User successfully deleted.";
 		}
 		else {
-			return "User not deleted";
+			throw new RuntimeException("This user does not exist.");
 		}
 	}
 	
-	public User updateUserById(Long id, UserDTO update) {
+	public UserResponse updateUserById(Long id, UserRequest update) {
 		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with Id " + id + " not found."));
 		
 		if(update.getName() != null && !update.getName().isBlank()) {
@@ -65,11 +66,6 @@ public class UserService {
 			user.setPassword(update.getPassword());
 		}
 		
-		return userRepository.save(user);
+		return new UserResponse(userRepository.save(user));
 	}
 }
-
-
-
-
-

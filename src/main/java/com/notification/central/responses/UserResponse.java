@@ -1,32 +1,29 @@
-package com.notification.central.dto;
+package com.notification.central.responses;
 
 import com.notification.central.entities.PermissionType;
 import com.notification.central.entities.User;
 
-public class UserDTO {
+public class UserResponse {
 	private Long id;
 	private String name;
 	private String email;
 	private PermissionType permission;
-	private String password;
 	
-	public UserDTO() {
+	public UserResponse() {
 	}
-	
-	public UserDTO(Long id, String name, String email, PermissionType permission,String password) {
+
+	public UserResponse(Long id, String name, String email, PermissionType permission) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.permission = permission;
-		this.password = password;
 	}
-	
-	public UserDTO(User entity) {
+
+	public UserResponse(User entity) {
 		this.id = entity.getId();
 		this.name = entity.getName();
 		this.email = entity.getEmail();
 		this.permission = entity.getPermission();
-		this.password = entity.getPassword();
 	}
 
 	public Long getId() {
@@ -59,13 +56,5 @@ public class UserDTO {
 
 	public void setPermission(PermissionType permission) {
 		this.permission = permission;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.notification.central.entities.Message;
+import com.notification.central.responses.MessageResponse;
 
 @Repository
 public interface MessageRepository extends JpaRepository <Message, Long>{
@@ -18,5 +19,5 @@ public interface MessageRepository extends JpaRepository <Message, Long>{
 			      OR (m.senderUser.id = :user2 AND m.recipientUser.id = :user1)
 			   ORDER BY m.sendAt ASC
 			""")
-	List<Message> findConversation(Long user1, Long user2);
+	List<MessageResponse> findConversation(Long user1, Long user2);
 }

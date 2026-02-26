@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.notification.central.dto.UserDTO;
 import com.notification.central.entities.User;
+import com.notification.central.requests.UserRequest;
+import com.notification.central.responses.UserResponse;
 import com.notification.central.services.UserService;
 
 @RestController
@@ -25,17 +26,17 @@ public class UserController {
 	UserService userService;
 	
 	@PostMapping(value = "/register")
-	public ResponseEntity<User> createAccount(@RequestBody UserDTO dto) {
-		return ResponseEntity.ok(userService.createAccount(dto));
+	public ResponseEntity<UserResponse> createAccount(@RequestBody UserRequest request) {
+		return ResponseEntity.ok(userService.createAccount(request));
 	}
 	
 	@GetMapping(value ="/all")
-	public ResponseEntity<List<User>> listAllUsers() {
+	public ResponseEntity<List<UserResponse>> listAllUsers() {
 		return ResponseEntity.ok(userService.listAllUsers());
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<User> findUserById(@PathVariable Long id) {
+	public ResponseEntity<UserResponse> findUserById(@PathVariable Long id) {
 		return ResponseEntity.ok(userService.findUserById(id));
 	}
 	
@@ -45,7 +46,7 @@ public class UserController {
 	}
 	
 	@PutMapping(value = "/update/{id}")
-	public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody UserDTO dto) {
-		return ResponseEntity.ok(userService.updateUserById(id, dto));
+	public ResponseEntity<UserResponse> updateUserById(@PathVariable Long id, @RequestBody UserRequest request) {
+		return ResponseEntity.ok(userService.updateUserById(id, request));
 	}
 }	
