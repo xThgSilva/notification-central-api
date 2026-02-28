@@ -3,6 +3,7 @@ package com.notification.central.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.notification.central.entities.PermissionType;
@@ -20,6 +21,9 @@ public class UserService {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	PasswordEncoder passwordConfig;
 
 	public UserResponse createAccount(UserRequest request) {
 		User user = new User();
@@ -30,15 +34,12 @@ public class UserService {
 		}
 		user.setEmail(request.getEmail());
 		
-		if (request.getPermission() != PermissionType.USER || request.getPermission() != PermissionType.ADMIN) {
-			throw new InvalidPermissionTypeException("The user permission type is invalid.");
-		}
-		user.setPermission(request.getPermission());
+		user.setPermission(PermissionType.USER);
 
 		if (request.getPassword().length() < 5) {
 			throw new InsufficienteCharactersException("The password must be at least 5 characters long.");
 		}
-		user.setPassword(request.getPassword());
+		user.setPassword(passwordConfig.encode(request.getPassword()));
 
 		user = userRepository.save(user);
 
