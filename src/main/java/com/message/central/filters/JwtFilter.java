@@ -34,7 +34,13 @@ public class JwtFilter extends OncePerRequestFilter{
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String token = extractTokenFromCookie(request);
+    	String authHeader = request.getHeader("Authorization");
+
+    	String token = null;
+
+    	if (authHeader != null && authHeader.startsWith("Bearer ")) {
+    	    token = authHeader.substring(7);
+    	}
 
         if (token != null) {
             try {
@@ -58,17 +64,5 @@ public class JwtFilter extends OncePerRequestFilter{
             }
         }
         filterChain.doFilter(request, response);
-    }
-
-    private String extractTokenFromCookie(HttpServletRequest request) {
-
-        if (request.getCookies() == null) return null;
-
-        for (Cookie cookie : request.getCookies()) {
-            if ("token".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
     }
 }

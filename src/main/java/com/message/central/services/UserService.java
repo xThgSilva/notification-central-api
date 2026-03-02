@@ -104,14 +104,6 @@ public class UserService {
 
 		String token = jwt.generateToken(request.getEmail());
 
-		Cookie cookie = new Cookie("token", token);
-		cookie.setHttpOnly(true);
-		cookie.setSecure(false);
-		cookie.setPath("/");
-		cookie.setMaxAge(60 * 60);
-
-		httpResponse.addCookie(cookie);
-
 		return new LoginResponse("Login Succesully", token);
 	}
 }
