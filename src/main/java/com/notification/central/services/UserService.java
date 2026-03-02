@@ -24,6 +24,9 @@ public class UserService {
 	
 	@Autowired
 	PasswordEncoder passwordConfig;
+	
+	@Autowired
+	EmailService emailService;
 
 	public UserResponse createAccount(UserRequest request) {
 		User user = new User();
@@ -42,6 +45,7 @@ public class UserService {
 		user.setPassword(passwordConfig.encode(request.getPassword()));
 
 		user = userRepository.save(user);
+		emailService.sendWelcomeEmail(user);
 
 		return new UserResponse(user);
 	}

@@ -69,16 +69,22 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Security Dependencies-->
 		<dependency>
       		<groupId>org.springframework.boot</groupId>
       		<artifactId>spring-boot-starter-security</artifactId>
     	</dependency>
 
    		<dependency>
-      <groupId>org.springframework.boot</groupId>
+      		<groupId>org.springframework.boot</groupId>
       		<artifactId>spring-boot-starter-security-test</artifactId>
       		<scope>test</scope>
     	</dependency>
+    	<!-- Email dependency JavaMail -->
+    	<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
