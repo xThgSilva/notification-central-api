@@ -1,1 +1,1 @@
-# Notification Central API
+# Message Central API
