@@ -21,7 +21,7 @@ public class UserResponse {
 		this.name = entity.getName();
 		this.email = entity.getEmail();
 	}
-
+	
 	public Long getId() {
 		return id;
 	}

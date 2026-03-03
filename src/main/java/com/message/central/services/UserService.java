@@ -2,6 +2,8 @@ package com.message.central.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,6 @@ import com.message.central.requests.UserRequest;
 import com.message.central.responses.LoginResponse;
 import com.message.central.responses.UserResponse;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
@@ -54,8 +55,12 @@ public class UserService {
 		return new UserResponse(user);
 	}
 
-	public List<UserResponse> listAllUsers() {
-		return userRepository.findAll().stream().map(UserResponse::new).toList();
+	public Page<UserResponse> listAllUsers(int page, int size) {
+	    PageRequest pageable = PageRequest.of(page, size);
+
+	    Page<User> users = userRepository.findAll(pageable);
+
+	    return users.map(UserResponse::new);
 	}
 
 	public UserResponse findUserById(Long id) {
