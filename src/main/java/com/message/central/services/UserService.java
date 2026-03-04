@@ -1,12 +1,12 @@
 package com.message.central.services;
 
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.message.central.entities.User;
 import com.message.central.exceptions.EmailAlreadyExistsException;
 import com.message.central.exceptions.InsufficienteCharactersException;
@@ -31,7 +31,7 @@ public class UserService {
 
 	@Autowired
 	EmailService emailService;
-	
+
 	@Autowired
 	JwtService jwt;
 
@@ -56,11 +56,11 @@ public class UserService {
 	}
 
 	public Page<UserResponse> listAllUsers(int page, int size) {
-	    PageRequest pageable = PageRequest.of(page, size);
+		PageRequest pageable = PageRequest.of(page, size);
 
-	    Page<User> users = userRepository.findAll(pageable);
+		Page<User> users = userRepository.findAll(pageable);
 
-	    return users.map(UserResponse::new);
+		return users.map(UserResponse::new);
 	}
 
 	public UserResponse findUserById(Long id) {
@@ -110,5 +110,17 @@ public class UserService {
 		String token = jwt.generateToken(request.getEmail());
 
 		return new LoginResponse("Login Succesully", token);
+	}
+
+	public UserResponse whoIsMe(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		
+		UserResponse response = new UserResponse(
+			user.getId(),
+			user.getName(),
+			user.getEmail()
+		);
+		
+		return response;
 	}
 }
