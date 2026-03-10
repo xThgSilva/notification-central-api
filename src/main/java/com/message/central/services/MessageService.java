@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.message.central.entities.Message;
@@ -24,6 +25,9 @@ public class MessageService {
 	@Autowired 
 	UserRepository userRepository;
 	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	
 	public MessageResponse sendMessage(MessageRequest request) {
 		User sender = userRepository.findById(request.getSenderUserId())
 	            .orElseThrow(() -> new NotFoundException("Sender not found"));
@@ -41,8 +45,20 @@ public class MessageService {
 	    message.setSendAt(LocalDateTime.now());
 
 	    messageRepository.save(message);
+	    
+	    MessageResponse response = new MessageResponse(message);
 
-	    return new MessageResponse(message);
+	    messagingTemplate.convertAndSend(
+	        "/topic/messages/" + recipient.getId(),
+	        response
+	    );
+
+	    messagingTemplate.convertAndSend(
+	        "/topic/messages/" + sender.getId(),
+	        response
+	    );
+
+	    return response;
 	}
 	
 	public List<MessageResponse> listConversationBetweenUsers(Long senderId, Long recipientId) {
